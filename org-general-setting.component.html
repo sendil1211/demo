@@ -1,0 +1,173 @@
+<div id="loadingWrapper">
+  <ibm-loading *ngIf='orgGeneralSettingPageLoad' overlay='true' [title]='loadingTitle'></ibm-loading>
+  <section style="padding:20px;">
+
+    <form [formGroup]="form">
+
+      <ibm-breadcrumb>
+        <ibm-breadcrumb-item href="setting-management/orgsetting">
+          Organization setting
+        </ibm-breadcrumb-item>
+        General settings
+      </ibm-breadcrumb>
+
+      <br>
+      <h1 style="font-weight: bold" translate="general setting">General settings</h1>
+      <br><br>
+
+      <ibm-label>
+        <p translate="Default Organization Language" class="inputbottomLabel">Default organization language</p>
+        <div>
+          <ibm-dropdown formControlName="defaultOrganizationLanguage" style="border-bottom:1px solid #ffffff">
+            <ibm-dropdown-list [items]="orgLanguageList"></ibm-dropdown-list>
+          </ibm-dropdown>
+        </div>
+      </ibm-label>
+      <br>
+      <ibm-label>
+        <p translate="Default folder visibility">Default folder visibility:</p>
+        <ibm-radio-group aria-label="radiogroup" formControlName="defaultFolderVisibility" (change)="onFolderVisibilityChange($event)"
+          class="radioStyle">
+          <ibm-radio value="Shared" [checked]="sharedFolderVisibility">
+            Shared
+          </ibm-radio>
+          <ibm-radio value="Private" [checked]="privateFolderVisibility">
+            Private
+          </ibm-radio>
+        </ibm-radio-group>
+      </ibm-label>
+      <br>
+      <ibm-label>
+        <p translate="Include IP Of Contact or User">Include IP Of Contact or User</p>
+        <ibm-checkbox formControlName="includeRecipientIP" (change)="onIncludeIpOfContactUserChange($event)" class="checkboxStyle">
+          Profile actions
+        </ibm-checkbox>
+      </ibm-label>
+      <hr>
+
+      <br>
+      <h1 style="font-weight: bold" translate="Notifications">Notifications</h1>
+      <br>
+
+      <ibm-label style="width:60%">
+        <p translate="Notification email address for system issues" class="inputbottomnotificationLabel">Notification
+          email address for system issues:</p>
+        <input ibmText placeholder="" formControlName="systemNotificationEmail" />
+        <div *ngIf="form.get('systemNotificationEmail').errors && (form.get('systemNotificationEmail').touched || form.get('systemNotificationEmail').dirty) ">
+          <!-- <span style="margin-top:1px;color:#e0182d" *ngIf="f.systemNotificationEmail.errors.required">
+            Notification field may not be blank
+          </span> -->
+          <span style="margin-top:1px;color:#e0182d" *ngIf="f.systemNotificationEmail.errors.pattern">
+            The format of the email address you entered is not valid for Notification
+          </span>
+         </div>
+      </ibm-label>
+
+      <ibm-label style="margin-top:20px">
+        <p translate="Notification replies sent from">Notification replies sent from:</p>
+        <ibm-radio-group aria-label="radiogroup" formControlName="notificationReplySentFrom" (change)="onChangeNotificationReplies($event)"
+          class="radioStyle">
+          <ibm-radio [checked]="wcaNotificationReplies" value="Silverpop">
+            Watson Campaign Automation
+          </ibm-radio>
+          <ibm-radio value="Custom" [checked]="customNotificationReplies">
+            Custom
+          </ibm-radio>
+        </ibm-radio-group>
+      </ibm-label>
+
+      <br>
+      <div class="customForm" style="padding: 20px; width: 1200px;margin-top:-20px" [hidden]="!showCustomPane">
+        <div ibmRow>
+          <div ibmCol style="display:inline-block; width: 45%">
+            <div class="bx--label">VMTA name</div>
+            <ibm-dropdown formControlName="notificationVmtaNames">
+              <ibm-dropdown-list [items]="vmtaList"></ibm-dropdown-list>
+            </ibm-dropdown>
+            <ibm-label>
+              <p translate="From name" style="margin-top:5px">From name</p>
+              <input ibmText placeholder="" formControlName="notificationFromName" />
+
+              <div *ngIf="form.get('notificationFromName').errors && (form.get('notificationFromName').touched || form.get('notificationFromName').dirty)">
+                <span style="margin-top:1px;color:#e0182d" translate="From name field may not be blank">
+                  From name field may not be blank
+                </span>
+              </div>
+            </ibm-label>
+
+            <ibm-label style="margin-top:10px" translate="From address">
+              From address
+              <input ibmText placeholder="" formControlName="notificationFromAddress" />
+
+              <div *ngIf="form.get('notificationFromAddress').errors && (form.get('notificationFromAddress').touched || form.get('notificationFromAddress').dirty)">
+                <span style="margin-top:1px;color:#e0182d" *ngIf="f.notificationFromAddress.errors.required" translate="From address field may not be blank">             
+                  From address field may not be blank
+                </span>
+                <span style="margin-top:1px;color:#e0182d" *ngIf="f.notificationFromAddress.errors.pattern">
+                  The format of the email address you entered is not valid for From address
+                </span>
+
+              </div>
+
+
+            </ibm-label>
+
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <div ibmCol style="display:inline-block; width: 45%">
+
+            <ibm-label>
+              <p translate="Product name">Product name</p>
+              <input ibmText placeholder="" formControlName="notificationProductName" />
+              <div *ngIf="f.notificationProductName.errors && (f.notificationProductName.touched || f.notificationProductName.dirty)">
+                <span style="margin-top:1px;color:#e0182d" translate="Product name field may not be blank">
+                  Product name field may not be blank
+                </span>
+              </div>
+            </ibm-label>
+            <ibm-label style="margin-top:5px">
+              <p translate="Signature" style="margin-top:2px">Signature</p>
+              <input ibmText placeholder="" formControlName="notificationSignature" />
+              <div *ngIf="f.notificationSignature.errors && (f.notificationSignature.touched || f.notificationSignature.dirty)">
+                <span style="margin-top:1px;color:#e0182d" translate="Signature field may not be blank">
+                  Signature field may not be blank
+                </span>
+              </div>
+            </ibm-label>
+            <ibm-label style="margin-top:5px" translate="Reply to Address">
+              Reply to address
+              <input ibmText placeholder="" formControlName="notificationReplyToAddress" class="inputBorder" />
+              <div *ngIf="form.get('notificationReplyToAddress').errors && (form.get('notificationReplyToAddress').touched || form.get('notificationReplyToAddress').dirty)">
+                <span style="margin-top:1px;color:#e0182d" *ngIf="f.notificationReplyToAddress.errors.required"
+                  translate="Reply to address field may not be blank">
+                  Reply to address field may not be blank
+                </span>
+                <span style="margin-top:1px;color:#e0182d" *ngIf="f.notificationReplyToAddress.errors.pattern">
+                  The format of the email address you entered is not valid for Reply to address
+                </span>
+              </div>
+            </ibm-label>
+
+          </div>
+        </div>
+        <div ibmRow>
+          <div ibmCol style="display:inline-block; width: 45%"></div>
+          <div ibmCol style="display:inline-block; width: 45%;margin-left:20px;margin-top:10px;color:#565656">
+            <p translate="Use the same domain for the address and reply to address to avoid ISP blocking">Use the
+              same domain
+              for the from address and reply to address to avoid ISP blocking</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="margin-left:20px;float:right">
+        <button ibmButton="secondary" width="20%" size="sm" theme="dark" (click)="navigateOrgSettingHome()">Cancel
+        </button>
+        <button ibmButton="primary" size="sm" theme="dark" (click)="generalSettingOnSubmit()">Save</button>
+      </div>
+
+    </form>
+
+  </section>
+</div>
